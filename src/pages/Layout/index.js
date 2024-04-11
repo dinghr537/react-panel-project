@@ -6,28 +6,38 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons'
 import './index.scss'
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'
+
 
 const { Header, Sider } = Layout
 
 const items = [
   {
     label: '首页',
-    key: '1',
+    key: '/',
     icon: <HomeOutlined />,
   },
   {
     label: '文章管理',
-    key: '2',
+    key: '/article',
     icon: <DiffOutlined />,
   },
   {
     label: '创建文章',
-    key: '3',
+    key: '/publish',
     icon: <EditOutlined />,
   },
 ]
 
 const GeekLayout = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const selectedKeys = location.pathname
+  const onMenuClick = (item) => {
+    const path = item.key
+    navigate(path)
+  }
+
   return (
     <Layout>
       <Header className="header">
@@ -46,12 +56,13 @@ const GeekLayout = () => {
           <Menu
             mode="inline"
             theme="dark"
-            defaultSelectedKeys={['1']}
+            onClick={onMenuClick}
+            selectedKeys={selectedKeys}
             items={items}
             style={{ height: '100%', borderRight: 0 }}></Menu>
         </Sider>
         <Layout className="layout-content" style={{ padding: 20 }}>
-          内容
+          <Outlet />
         </Layout>
       </Layout>
     </Layout>
