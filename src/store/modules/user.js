@@ -4,11 +4,12 @@ import { http } from '@/utils/'
 const userSlice = createSlice({
     name: 'user',
     initialState: {
-        token: ''
+        token: localStorage.getItem('token_key') || ''
     },
     reducers: {
         setToken(state, action) {
             state.token = action.payload
+            localStorage.setItem('token_key', action.payload)
         }
     }
 })
