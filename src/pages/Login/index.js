@@ -1,15 +1,19 @@
 import './index.scss'
-import { Card, Form, Input, Button } from 'antd'
+import { Card, Form, Input, Button, message } from 'antd'
 import logo from '@/assets/logo.png'
 import { useDispatch } from 'react-redux'
 import { fetchLogin } from '@/store/modules/user'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
   const dispatch = useDispatch()
-  const onFinish = (values) => {
+  const navigate = useNavigate()
+  const onFinish = async (values) => {
     console.log(values)
-    dispatch(fetchLogin(values))
+    await dispatch(fetchLogin(values))
+    navigate('/')
+    message.success('login succeed')
   }
 
 
