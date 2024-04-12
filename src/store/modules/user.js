@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { http, getToken, setToken as _setToken, removeToken } from '@/utils/'
+import { loginAPI, getUserInfoAPI } from '@/apis/user'
 
 const userSlice = createSlice({
     name: 'user',
@@ -27,14 +28,14 @@ const { setToken, setUserInfo, clearUserInfo } = userSlice.actions
 
 const fetchLogin = (loginForm) => {
     return async (dispatch) => {
-        const res = await http.post('/authorizations', loginForm)
+        const res = await loginAPI(loginForm)
         dispatch(setToken(res.data.token))
     }
 }
 
 const fetchUserInfo = () => {
     return async (dispatch) => {
-        const res = await http.get('/user/profile')
+        const res = await getUserInfoAPI()
         dispatch(setUserInfo(res.data))
     }
 }
