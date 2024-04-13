@@ -105,6 +105,7 @@ return (
                 action={'http://geek.itheima.net/v1_0/upload'}
                 showUploadList
                 onChange={onUploadChange}
+                maxCount={imageType}
             >
                 <div style={{ marginTop: 8 }}>
                 <PlusOutlined />
