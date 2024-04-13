@@ -16,23 +16,18 @@ import './index.scss'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { useEffect, useState } from 'react'
-import { getChannelAPI, createArticleAPI } from '@/apis/article'
+import { createArticleAPI } from '@/apis/article'
+import { useChannel } from '@/hooks/useChannel'
   
 const { Option } = Select
 
 const Publish = () => {
 
-const [channelList, setChannelList] = useState([])
+
 const [imageList, setImageList] = useState([])
 const [imageType, setImageType] = useState(1)
 
-useEffect(() => {
-    const getChannelList = async () => {
-        const res = await getChannelAPI()
-        setChannelList(res.data.channels)
-    }
-    getChannelList()
-}, [])
+const { channelList } = useChannel()
 
 const onFinish = (formValue) => {
     if (imageList.length !== imageType) {
