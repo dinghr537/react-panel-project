@@ -11,3 +11,7 @@ export function createArticleAPI(article) {
     data: article
   })
 }
+
+export function getArticleListAPI(params) {
+    return http.get('/mp/articles', { params })
+}

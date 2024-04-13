@@ -44,6 +44,7 @@ const onFinish = (formValue) => {
         channel_id
     }
     createArticleAPI(reqData)
+    message.success('发布成功')
 }
 
 const onUploadChange = (value) => {

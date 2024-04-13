@@ -5,6 +5,9 @@ import { Table, Tag, Space } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/error.png'
 import { useChannel } from '@/hooks/useChannel'
+import { useEffect, useMemo } from 'react'
+import { getArticleListAPI } from '@/apis/article'
+import { useState } from 'react'
 
 
 const { Option } = Select
@@ -79,54 +82,71 @@ const Article = () => {
 		title: 'wkwebview离线化加载h5资源解决方案'
 	}
 	]
-	const { channelList } = useChannel()
-	return (
-	<div>
-		<Card
-		title={
-			<Breadcrumb items={[
-			{ title: <Link to={'/'}>首页</Link> },
-			{ title: '文章列表' },
-			]} />
+
+	const [articleList, setArticleList] = useState([])
+	const [articleCount, setArticleCount] = useState(0)
+	useEffect(()=>{
+		const getArticleList = async () => {
+			const res = await getArticleListAPI()
+			setArticleList(res.data.results)
+			setArticleCount(res.data.total_count)
 		}
-		style={{ marginBottom: 20 }}
-		>
-		<Form initialValues={{ status: '' }}>
-			<Form.Item label="状态" name="status">
-			<Radio.Group>
-				<Radio value={''}>全部</Radio>
-				<Radio value={0}>草稿</Radio>
-				<Radio value={2}>审核通过</Radio>
-			</Radio.Group>
-			</Form.Item>
+		getArticleList()
+	}, [])
+	const { channelList } = useChannel()
+	// const currentArticles = useMemo(()=>{
+	// 	const num = articleList.length
+	// 	return {num}
+	// }, [articleList])
 
-			<Form.Item label="频道" name="channel_id">
-			<Select
-				placeholder="请选择文章频道"
-				defaultValue=""
-				style={{ width: 120 }}
+	return (
+		<div>
+			<Card
+			title={
+				<Breadcrumb items={[
+				{ title: <Link to={'/'}>首页</Link> },
+				{ title: '文章列表' },
+				]} />
+			}
+			style={{ marginBottom: 20 }}
 			>
-				{channelList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
-			</Select>
-			</Form.Item>
+			<Form initialValues={{ status: '' }}>
+				<Form.Item label="状态" name="status">
+				<Radio.Group>
+					<Radio value={''}>全部</Radio>
+					<Radio value={0}>草稿</Radio>
+					<Radio value={2}>审核通过</Radio>
+				</Radio.Group>
+				</Form.Item>
 
-			<Form.Item label="日期" name="date">
-			{/* 传入locale属性 控制中文显示*/}
-			<RangePicker locale={locale}></RangePicker>
-			</Form.Item>
+				<Form.Item label="频道" name="channel_id">
+				<Select
+					placeholder="请选择文章频道"
+					defaultValue=""
+					style={{ width: 120 }}
+				>
+					{channelList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
+				</Select>
+				</Form.Item>
 
-			<Form.Item>
-			<Button type="primary" htmlType="submit" style={{ marginLeft: 40 }}>
-				筛选
-			</Button>
-			</Form.Item>
-		</Form>
-		</Card>
-		<Card title={`根据筛选条件共查询到 count 条结果：`}>
-		<Table rowKey="id" columns={columns} dataSource={data} />
-		</Card>
-	</div>
-  )
+				<Form.Item label="日期" name="date">
+				{/* 传入locale属性 控制中文显示*/}
+				<RangePicker locale={locale}></RangePicker>
+				</Form.Item>
+
+				<Form.Item>
+				<Button type="primary" htmlType="submit" style={{ marginLeft: 40 }}>
+					筛选
+				</Button>
+				</Form.Item>
+			</Form>
+			</Card>
+			{/* <Card title={`根据筛选条件共查询到 ${currentArticles.num} 条结果：`}> */}
+			<Card title={`根据筛选条件共查询到 ${articleCount} 条结果：`}>
+				<Table rowKey="id" columns={columns} dataSource={articleList} />
+			</Card>
+		</div>
+	)
 }
 
 export default Article
