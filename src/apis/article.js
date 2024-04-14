@@ -15,3 +15,7 @@ export function createArticleAPI(article) {
 export function getArticleListAPI(params) {
     return http.get('/mp/articles', { params })
 }
+
+export function deleteArticleAPI(id) {
+    return http.delete(`/mp/articles/${id}`)
+} 

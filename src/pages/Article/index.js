@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
-import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select } from 'antd'
+import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select, Popconfirm } from 'antd'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 import { Table, Tag, Space } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/error.png'
 import { useChannel } from '@/hooks/useChannel'
 import { useEffect, useMemo } from 'react'
-import { getArticleListAPI } from '@/apis/article'
+import { getArticleListAPI, deleteArticleAPI } from '@/apis/article'
 import { useState } from 'react'
 
 
@@ -60,13 +60,16 @@ const Article = () => {
 		render: data => {
 		return (
 			<Space size="middle">
-			<Button type="primary" shape="circle" icon={<EditOutlined />} />
-			<Button
-				type="primary"
-				danger
-				shape="circle"
-				icon={<DeleteOutlined />}
-			/>
+				<Button type="primary" shape="circle" icon={<EditOutlined />} />
+				<Popconfirm title="确定删除吗？" okText="确定" cancelText="取消" onConfirm={()=>onDelete(data)}>
+					<Button
+						type="primary"
+						danger
+						shape="circle"
+						icon={<DeleteOutlined />}
+					/>
+				</Popconfirm>
+				
 			</Space>
 		)
 		}
@@ -129,6 +132,14 @@ const Article = () => {
 			end_pubdate: values.date[1].format('YYYY-MM-DD')
 		})
 	
+	}
+
+	const onDelete = async (data) => {
+		console.log('delete', data)
+		await deleteArticleAPI(data.id)
+		setReqData({
+			...reqData
+		})
 	}
 
 	return (
