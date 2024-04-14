@@ -87,22 +87,45 @@ const Article = () => {
 	}
 	]
 
+	const [reqData, setReqData] = useState({
+		status: '',
+		channel_id: '',
+		begin_pubdate: '',
+		end_pubdate: '',
+		page: 1,
+		per_page: 4
+	
+	})
+
 	const [articleList, setArticleList] = useState([])
 	const [articleCount, setArticleCount] = useState(0)
 	useEffect(()=>{
 		const getArticleList = async () => {
-			const res = await getArticleListAPI()
+			const res = await getArticleListAPI(reqData)
 			setArticleList(res.data.results)
 			setArticleCount(res.data.total_count)
 			console.log(res)
 		}
 		getArticleList()
-	}, [])
+	}, [reqData])
 	const { channelList } = useChannel()
 	// const currentArticles = useMemo(()=>{
 	// 	const num = articleList.length
 	// 	return {num}
 	// }, [articleList])
+
+	
+
+	const handleFilter = (values) => {
+		setReqData({
+			...reqData,
+			status: values.status,
+			channel_id: values.channel_id,
+			begin_pubdate: values.date[0].format('YYYY-MM-DD'),
+			end_pubdate: values.date[1].format('YYYY-MM-DD')
+		})
+	
+	}
 
 	return (
 		<div>
@@ -115,7 +138,7 @@ const Article = () => {
 			}
 			style={{ marginBottom: 20 }}
 			>
-			<Form initialValues={{ status: '' }}>
+			<Form initialValues={{ status: '' }} onFinish={handleFilter}>
 				<Form.Item label="状态" name="status">
 				<Radio.Group>
 					<Radio value={''}>全部</Radio>
