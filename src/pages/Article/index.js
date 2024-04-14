@@ -13,11 +13,12 @@ import { useState } from 'react'
 const { Option } = Select
 const { RangePicker } = DatePicker
 
-const status = {
-	1: <Tag color="warning">待审核</Tag>,
-	2: <Tag color="success">审核通过</Tag>
-}
+
 const Article = () => {
+	const status = {
+		1: <Tag color="warning">待审核</Tag>,
+		2: <Tag color="success">审核通过</Tag>
+	}
 	// 准备列数据
 	const columns = [
 	{
@@ -113,9 +114,12 @@ const Article = () => {
 	// 	const num = articleList.length
 	// 	return {num}
 	// }, [articleList])
-
-	
-
+	const onPageChange = (page) => {
+		setReqData({
+			...reqData,
+			page
+		})
+	}
 	const handleFilter = (values) => {
 		setReqData({
 			...reqData,
@@ -171,7 +175,13 @@ const Article = () => {
 			</Card>
 			{/* <Card title={`根据筛选条件共查询到 ${currentArticles.num} 条结果：`}> */}
 			<Card title={`根据筛选条件共查询到 ${articleCount} 条结果：`}>
-				<Table rowKey="id" columns={columns} dataSource={articleList} />
+				<Table rowKey="id" columns={columns} dataSource={articleList} pagination={
+					{
+						total: articleCount,
+						pageSize: reqData.per_page,
+						onChange: onPageChange
+					}
+				}/>
 			</Card>
 		</div>
 	)
