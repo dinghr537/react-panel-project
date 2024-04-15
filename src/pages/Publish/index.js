@@ -64,7 +64,12 @@ const Publish = () => {
         if (!articleId) return
         async function getArticleDetail() {
             const res = await getArticleAPI(articleId)
-            form.setFieldsValue(res.data)
+            form.setFieldsValue({
+                ...res.data,
+                type: res.data.cover.type,
+            })
+            setImageType(res.data.cover.type)
+            setImageList(res.data.cover.images.map(url => ({ url })))
         }
         getArticleDetail()
         
@@ -121,6 +126,7 @@ const Publish = () => {
                     showUploadList
                     onChange={onUploadChange}
                     maxCount={imageType}
+                    fileList={imageList}
                 >
                     <div style={{ marginTop: 8 }}>
                     <PlusOutlined />
