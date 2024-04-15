@@ -23,3 +23,11 @@ export function deleteArticleAPI(id) {
 export function getArticleAPI(id) {
     return http.get(`/mp/articles/${id}`)
 }
+
+export function updateArticleAPI(article) {
+    return http({
+      method: 'PUT',
+      url: `/mp/articles/${article.id}?draft=false`,
+      data: article
+    })
+  }

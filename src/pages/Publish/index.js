@@ -16,7 +16,7 @@ import './index.scss'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { useEffect, useState } from 'react'
-import { createArticleAPI, getArticleAPI } from '@/apis/article'
+import { createArticleAPI, getArticleAPI, updateArticleAPI } from '@/apis/article'
 import { useChannel } from '@/hooks/useChannel'
   
 const { Option } = Select
@@ -40,11 +40,22 @@ const Publish = () => {
             content,
             cover: {
                 type: imageType,
-                images: imageList.map(item => item.response.data.url)
+                images: imageList.map(item => {
+                    if (item.response) {
+                        return item.response.data.url
+                    } else {
+                        return item.url
+                    }
+                })
             },
             channel_id
         }
-        createArticleAPI(reqData)
+        if ( articleId ) {
+            updateArticleAPI({...reqData, id: articleId})
+        } else {
+            createArticleAPI(reqData)
+        }
+        
         message.success('发布成功')
     }
 
