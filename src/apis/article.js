@@ -19,3 +19,7 @@ export function getArticleListAPI(params) {
 export function deleteArticleAPI(id) {
     return http.delete(`/mp/articles/${id}`)
 } 
+
+export function getArticleAPI(id) {
+    return http.get(`/mp/articles/${id}`)
+}
