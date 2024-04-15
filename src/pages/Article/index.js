@@ -8,6 +8,7 @@ import { useChannel } from '@/hooks/useChannel'
 import { useEffect, useMemo } from 'react'
 import { getArticleListAPI, deleteArticleAPI } from '@/apis/article'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 
 const { Option } = Select
@@ -15,6 +16,7 @@ const { RangePicker } = DatePicker
 
 
 const Article = () => {
+	const navigate = useNavigate()
 	const status = {
 		1: <Tag color="warning">待审核</Tag>,
 		2: <Tag color="success">审核通过</Tag>
@@ -60,7 +62,7 @@ const Article = () => {
 		render: data => {
 		return (
 			<Space size="middle">
-				<Button type="primary" shape="circle" icon={<EditOutlined />} />
+				<Button type="primary" shape="circle" onClick={()=>navigate(`/publish?id=${data.id}`)} icon={<EditOutlined />} />
 				<Popconfirm title="确定删除吗？" okText="确定" cancelText="取消" onConfirm={()=>onDelete(data)}>
 					<Button
 						type="primary"
